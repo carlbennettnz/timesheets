@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel --experimental-scope-hoisting src/index.html"
+    "build": "parcel build --experimental-scope-hoisting src/index.html"
   },
   "devDependencies": {
     "@types/react": "16.4.9",
