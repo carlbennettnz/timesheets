@@ -1,9 +1,37 @@
 version: 2.1
+
 orbs:
   cypress: cypress-io/cypress@1
+
+jobs:
+  release:
+    docker:
+      - image: cypress/base:10
+
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: yarn deploy:prod
+
+
 workflows:
   build:
     jobs:
+      - cypress/install:
+          yarn: true
+          build: yarn build
+
       - cypress/run:
           yarn: true
-          start: yarn start
+
+          # ensures the workspace is reattached
+          parallel: true
+          parallelism: 1
+
+          start: npx serve -p 1234 dist
+          requires:
+            - cypress/install
+
+      - release:
+          requires:
+            - cypress/run

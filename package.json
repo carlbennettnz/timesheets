@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "rm -f dist/* && parcel build --experimental-scope-hoisting src/index.html",
+    "build": "rm -f dist/* && parcel build src/index.html",
     "test:unit": "echo 'test cmd here...'",
     "test:e2e": "cypress open",
     "deploy:staging": "surge --project ./dist --domain \"timesheets-staging-$(git rev-parse --short HEAD).surge.sh\"",
