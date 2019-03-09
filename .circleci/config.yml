@@ -10,7 +10,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependencies-{{ checksum "yarn.lock" }}
+          keys:
+            - dependencies-{{ checksum "yarn.lock" }}
+            - dependencies
       - run: yarn --frozen-lockfile
       - save_cache:
           paths:
@@ -36,12 +38,67 @@ jobs:
       - store_artifacts:
           path: dist
 
+  test_unit:
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - attach_workspace:
+          at: .
+      - run: yarn test:unit
+
+  deploy_staging:
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - attach_workspace:
+          at: .
+      - run: yarn deploy:staging
+
+  test_e2e:
+    docker:
+      - image: digitalgenius/ubuntu-node-chrome-selenium
+
+    steps:
+      - attach_workspace:
+          at: .
+      - run: npm run test:e2e
+
+  deploy_prod:
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - attach_workspace:
+          at: .
+      - run: yarn deploy:prod
+
 workflows:
   version: 2
 
   primary:
     jobs:
       - install
+
+      - test_unit:
+          requires:
+            - install
+
       - build:
           requires:
             - install
+
+      - deploy_staging:
+          requires:
+            - build
+
+      - test_e2e:
+          requires:
+            - test_unit
+            - deploy_staging
+
+      - deploy_prod:
+          requires:
+            - test_e2e
+            - deploy_staging

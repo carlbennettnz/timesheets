@@ -8,12 +8,17 @@
   "private": false,
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build --experimental-scope-hoisting src/index.html"
+    "build": "rm -f dist/* && parcel build --experimental-scope-hoisting src/index.html",
+    "test:unit": "echo 'test cmd here...'",
+    "test:e2e": "STAGING_SERVER=\"timesheets-staging-$(git rev-parse --short HEAD).surge.sh\" testcafe chrome:headless tests/**/*",
+    "deploy:staging": "surge --project ./dist --domain \"timesheets-staging-$(git rev-parse --short HEAD).surge.sh\"",
+    "deploy:prod": "surge --project ./dist --domain \"timesheets.surge.sh\""
   },
   "devDependencies": {
     "@types/react": "16.4.9",
     "@types/react-dom": "^16.8.2",
     "parcel": "^1.12.0",
+    "surge": "^0.20.1",
     "testcafe": "^1.1.0",
     "typescript": "^3.3.3333"
   },
