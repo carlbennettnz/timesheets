@@ -1,0 +1,26 @@
+{
+  "name": "timesheets",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "repository": "https://github.com/carlbennettnz/timesheets",
+  "author": "Carl Bennett",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel --experimental-scope-hoisting src/index.html"
+  },
+  "devDependencies": {
+    "@types/react": "16.4.9",
+    "@types/react-dom": "^16.8.2",
+    "parcel": "^1.12.0",
+    "testcafe": "^1.1.0",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "idb": "^3.0.2",
+    "preact": "^8.4.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  }
+}
