@@ -1,18 +1,36 @@
 /// <reference types="Cypress" />
 
+import { format, startOfMonth } from 'date-fns'
+
+const SELECT_DAY_CELLS = 'td:nth-child(1)'
+const SELECT_HOURS_CELLS = 'td:nth-child(2)'
+
 describe('viewing existing entries', () => {
-  it.skip('shows none if there are none', () => {
+  it('shows all days in the month with 0 hours logged', () => {
     cy.setEntries([])
     cy.visit('/')
-    cy.contains(`There aren't any timesheet entries to display yet`)
+
+    cy.get(SELECT_HOURS_CELLS).each(td => {
+      expect(td.text()).to.include('0:00')
+    })
+
+    const dateSuffix = format(new Date(), 'MM/YYYY')
+    cy.get(SELECT_DAY_CELLS).each((td, i) => {
+      expect(td.text()).to.include(`${i + 1}/${dateSuffix}`)
+    })
   })
 
-  it('shows one if there is one', () => {
+  it('shows logged hours', () => {
     cy.setEntries([
-      { day: '2019-03-05', hours: 5.5, notes: 'time spent on x...' }
+      {
+        day: format(startOfMonth(new Date()), 'YYYY-MM-DD'),
+        hours: 5.5,
+        notes: 'time spent on x...'
+      }
     ])
-
     cy.visit('/')
-    cy.contains('5:30')
+
+    cy.get('tr:nth-child(1)').contains('5:30')
+    cy.get('tr:nth-child(1)').contains('time spent on x...')
   })
 })
