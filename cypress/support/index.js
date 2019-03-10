@@ -13,8 +13,16 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
 import './commands'
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+Cypress.on('window:before:load', win => {
+  // console.log('deleting database')
+  // win.indexedDB.deleteDatabase('timesheets')
+})
+
+/*
+
+- test that the db can be created by timesheets app once
+- in all other cases, create the db as part of the test
+
+*/

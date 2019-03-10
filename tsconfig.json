@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "lib": ["es2015", "esnext", "dom"],
+    "experimentalDecorators": true,
     "target": "es2018",
     "module": "commonjs",
     "jsx": "react",
