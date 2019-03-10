@@ -23,6 +23,7 @@
     "prettier": "^1.16.4",
     "serve": "^10.1.2",
     "surge": "^0.20.1",
+    "tailwindcss": "^0.7.4",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3333",
     "utility-types": "^3.4.1",

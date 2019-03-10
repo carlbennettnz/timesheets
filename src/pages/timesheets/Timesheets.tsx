@@ -19,15 +19,17 @@ export const Timesheets = () => {
         <EntryList entries={timesheets} />
       )}
 
-      <h4>To-do:</h4>
+      <div className="p-4">
+        <h4 className="mb-2">To-do:</h4>
 
-      <ol>
-        <li style={{ textDecoration: 'line-through' }}>Display in grid</li>
-        <li>Make editable</li>
-        <li>Month/week selection</li>
-        <li>Project selection</li>
-        <li>API sync</li>
-      </ol>
+        <ol>
+          <li style={{ textDecoration: 'line-through' }}>Display in grid</li>
+          <li>Make editable</li>
+          <li>Month/week selection</li>
+          <li>Project selection</li>
+          <li>API sync</li>
+        </ol>
+      </div>
     </main>
   )
 }

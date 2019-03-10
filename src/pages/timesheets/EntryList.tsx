@@ -17,12 +17,12 @@ export const EntryList = ({ entries }: EntryListProps) => {
   ))
 
   return (
-    <table>
+    <table className="border-collapse w-full">
       <thead>
         <tr>
-          <th>Day</th>
-          <th>Hours</th>
-          <th>Notes</th>
+          <th className="p-2 border border-grey-light">Day</th>
+          <th className="p-2 border border-grey-light">Hours</th>
+          <th className="p-2 border border-grey-light">Notes</th>
         </tr>
       </thead>
       <tbody>{rows}</tbody>
@@ -36,9 +36,24 @@ type EntryRowProps = {
 }
 
 const EntryRow = ({ day, entry }: EntryRowProps) => (
-  <tr>
-    <td>{format(day, 'D/MM/YYYY')}</td>
-    <td>{entry && entry.hours}</td>
-    <td>{entry && entry.notes}</td>
+  <tr className={!entry || !entry.hours ? 'text-grey' : ''}>
+    <td className="p-2 w-32 border border-grey-light text-right">
+      {format(day, 'D/MM/YYYY')}
+    </td>
+    <td className="p-2 w-32 border border-grey-light text-right">
+      {formatHours(entry && entry.hours)}
+    </td>
+    <td className="p-2 border border-grey-light">{entry && entry.notes}</td>
   </tr>
 )
+
+const formatHours = (hours?: number) => {
+  hours = Math.max(0, hours || 0)
+
+  const hoursPart = Math.floor(hours)
+  const minutesPart = Math.floor((hours % 1) * 60)
+    .toString()
+    .padStart(2, '0')
+
+  return `${hoursPart}:${minutesPart}`
+}

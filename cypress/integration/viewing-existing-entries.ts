@@ -9,11 +9,10 @@ describe('viewing existing entries', () => {
 
   it('shows one if there is one', () => {
     cy.setEntries([
-      { day: '2019-03-05', hours: 5.5, notes: 'time spent on x...' },
-      { day: '2019-03-06', hours: 5.5, notes: 'time spent on x...' }
+      { day: '2019-03-05', hours: 5.5, notes: 'time spent on x...' }
     ])
 
     cy.visit('/')
-    cy.contains('5.5')
+    cy.contains('5:30')
   })
 })
