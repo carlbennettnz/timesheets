@@ -1,6 +1,6 @@
 export type Entry = {
   id: number
-  date: Date
+  day: string
   hours: number
   notes: string
 }

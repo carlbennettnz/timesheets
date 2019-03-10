@@ -1,37 +1,57 @@
 import React, { useEffect, useState } from 'react'
-import { startOfMonth } from 'date-fns'
+import { DB } from 'idb'
 
 import { NoTimesheets } from './NoTimesheets'
 import { EntryList } from './EntryList'
 import { Entry } from '../../types/Entry'
 import useDatabase from '../../effects/useDatabase'
+import { startOfMonth, endOfMonth, format } from 'date-fns'
 
 export const Timesheets = () => {
   const db = useDatabase('timesheets')
-  const [timesheets, setTimesheets] = useState(null as Entry[] | null)
-
-  useEffect(() => {
-    console.log('db', db)
-    if (!db) return
-
-    db.transaction('entries')
-      .objectStore('entries')
-      .getAll()
-      // .get(IDBKeyRange.lowerBound(startOfMonth(new Date())))
-      .then(result => setTimesheets(result || []))
-  }, [db])
+  const timesheets = useTimesheets(db)
 
   return (
     <main>
-      <h1>Timesheets App</h1>
-
-      {timesheets === null ? (
+      {!Array.isArray(timesheets) ? (
         <p>Loading…</p>
-      ) : timesheets.length ? (
-        <EntryList entries={timesheets} />
       ) : (
-        <NoTimesheets />
+        <EntryList entries={timesheets} />
       )}
+
+      <h4>To-do:</h4>
+
+      <ol>
+        <li style={{ textDecoration: 'line-through' }}>Display in grid</li>
+        <li>Make editable</li>
+        <li>Month/week selection</li>
+        <li>Project selection</li>
+        <li>API sync</li>
+      </ol>
     </main>
   )
+}
+
+const useTimesheets = (db: DB | null) => {
+  const [timesheets, setTimesheets] = useState(null as Entry[] | null)
+
+  useEffect(() => {
+    if (!db) return
+
+    const inThisMonth = IDBKeyRange.bound(
+      format(startOfMonth(new Date()), 'YYYY-MM-DD'),
+      format(endOfMonth(new Date()), 'YYYY-MM-DD')
+    )
+
+    db.transaction('entries')
+      .objectStore('entries')
+      .index('day')
+      .getAll(inThisMonth)
+      .then((result: Entry[] | null) => {
+        console.log({ result })
+        setTimesheets(result || [])
+      })
+  }, [db])
+
+  return timesheets
 }

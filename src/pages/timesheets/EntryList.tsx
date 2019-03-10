@@ -1,20 +1,44 @@
 import React from 'react'
+import { eachDay, startOfMonth, endOfMonth, format } from 'date-fns'
+
 import { Entry } from '../../types/Entry'
 
-export const EntryList = ({ entries }: { entries: Entry[] }) => (
-  <table>
-    <tbody>
-      {entries.map(entry => (
-        <EntryRow key={entry.id} {...entry} />
-      ))}
-    </tbody>
-  </table>
-)
+type EntryListProps = {
+  entries: Entry[]
+}
 
-const EntryRow = ({ date, hours, notes }: Entry) => (
+export const EntryList = ({ entries }: EntryListProps) => {
+  const days = eachDay(startOfMonth(new Date()), endOfMonth(new Date())).map(
+    day => format(day, 'YYYY-MM-DD')
+  )
+
+  const rows = days.map(day => (
+    <EntryRow key={day} day={day} entry={entries.find(e => e.day === day)} />
+  ))
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Hours</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  )
+}
+
+type EntryRowProps = {
+  day: string
+  entry?: Entry
+}
+
+const EntryRow = ({ day, entry }: EntryRowProps) => (
   <tr>
-    <td>{date.toDateString()}</td>
-    <td>{hours}</td>
-    <td>{notes}</td>
+    <td>{format(day, 'D/MM/YYYY')}</td>
+    <td>{entry && entry.hours}</td>
+    <td>{entry && entry.notes}</td>
   </tr>
 )
