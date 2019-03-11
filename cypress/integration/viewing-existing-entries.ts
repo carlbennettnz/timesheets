@@ -10,8 +10,8 @@ describe('viewing existing entries', () => {
     cy.setEntries([])
     cy.visit('/')
 
-    cy.get(SELECT_HOURS_CELLS).each(td => {
-      expect(td.text()).to.include('0:00')
+    cy.get(`${SELECT_HOURS_CELLS} input`).each(input => {
+      expect(input.val()).to.include('0:00')
     })
 
     const dateSuffix = format(new Date(), 'MM/YYYY')
@@ -30,7 +30,7 @@ describe('viewing existing entries', () => {
     ])
     cy.visit('/')
 
-    cy.get('tr:nth-child(1)').contains('5:30')
-    cy.get('tr:nth-child(1)').contains('time spent on x...')
+    cy.get('input:eq(0)').should('have.value', '5:30')
+    // cy.get('tr:nth-child(1)').contains('time spent on x...')
   })
 })
