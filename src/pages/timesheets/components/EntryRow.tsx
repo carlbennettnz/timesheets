@@ -2,13 +2,16 @@ import React from 'react'
 import { format } from 'date-fns'
 
 import { Entry } from '../../../types/Entry'
+import { DurationInput } from './DurationInput'
+import { Direction } from '../types/Direction'
 
 type EntryRowProps = {
   day: string
   entry?: Entry
+  move: (dir: Direction) => void
 }
 
-export const EntryRow = ({ day, entry }: EntryRowProps) => {
+export const EntryRow = ({ day, entry, move }: EntryRowProps) => {
   const baseStyles = 'border border-grey-light text-right bg-grey-lighter'
   const styles = [baseStyles, !entry || !entry.hours ? 'text-grey' : ''].join(
     ' '
@@ -20,26 +23,15 @@ export const EntryRow = ({ day, entry }: EntryRowProps) => {
         {format(day, 'D/MM/YYYY')}
       </td>
       <td className={`${styles} w-32`}>
-        <input
-          readOnly
+        <DurationInput
           className="p-2 w-full"
-          value={formatHours(entry && entry.hours)}
+          move={move}
+          hours={entry && entry.hours}
         />
       </td>
       <td className={styles}>
-        <input readOnly className="p-2 w-full" value={entry && entry.notes} />
+        <input readOnly className="p-2 w-full" value="" />
       </td>
     </tr>
   )
-}
-
-const formatHours = (hours?: number) => {
-  hours = Math.max(0, hours || 0)
-
-  const hoursPart = Math.floor(hours)
-  const minutesPart = Math.floor((hours % 1) * 60)
-    .toString()
-    .padStart(2, '0')
-
-  return `${hoursPart}:${minutesPart}`
 }
